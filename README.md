@@ -1,8 +1,7 @@
-# Robobit
+# PCB Rover
  Package for Microsoft Makecode
 
-This library provides a Microsoft Makecode package for the Robobit Buggy, see
-https://4tronix.co.uk/robobit/
+This library provides a Microsoft Makecode package for the 4tronix PCB Rover
 
 ## Driving the robot    
 The simplest way to drive robot is by using the `driveMilliseconds(...)` and `driveTurnMilliseconds(...)` blocks.   
