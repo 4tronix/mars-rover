@@ -129,7 +129,7 @@ namespace Rover
       * Initialise all servos to Angle=0
       */
     //% blockId="cu_zeroServos"
-    //% block
+    //% block="Centre all servos"
     export function zeroServos(): void
     {
         for (let i=0; i<16; i++)
@@ -174,7 +174,7 @@ namespace Rover
       * Drive forward (or backward) at speed.
       * @param speed speed of motor between -1023 and 1023. eg: 600
       */
-    //% blockId="cu_drive" block="drive Cur06 at speed %speed"
+    //% blockId="cu_drive" block="drive at speed %speed"
     //% speed.min=-1023 speed.max=1023
     //% weight=110
     export function drive(speed: number): void
@@ -222,8 +222,8 @@ namespace Rover
         }
         if ((motor == eMotor.Left) || (motor == eMotor.Both))
         {
-            pins.analogWritePin(AnalogPin.P0, realSpeed);
-            pins.digitalWritePin(DigitalPin.P8, forward ? 0 : 1);
+            pins.analogWritePin(AnalogPin.P8, realSpeed);
+            pins.digitalWritePin(DigitalPin.P0, forward ? 0 : 1);
         }
         if ((motor == eMotor.Right) || (motor == eMotor.Both))
         {
