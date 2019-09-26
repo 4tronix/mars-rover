@@ -96,6 +96,35 @@ enum eColors
     Black = 0x000000
 }
 
+/**
+  * Keypad keys
+  */
+enum eKeys
+{
+    //% block="stop"
+    kStop=0b0000000010000000,
+    //% block="forward"
+    kForward=0b0000010000000000,
+    //% block="reverse"
+    kReverse=0b0000000000010000,
+    //% block="forward left"
+    kForwardLeft=0b0000001000000000,
+    //% block="forward right"
+    kForwardRight=0b0000100000000000,
+    //% block="reverse left"
+    kReverseLeft=0b0000000000001000,
+    //% block="reverse right"
+    kReverseRight=0b0000000000100000,
+    //% block="spin left"
+    kSpinLeft=0b0000000001000000,
+    //% block="spin right"
+    kSpinRight=0b0000000100000000,
+    //% block="mast left"
+    kMastLeft=0b1000000000000000,
+
+    //% block="mast right"
+    kMastRight=0b0100000000000000
+}
 
 /**
  * Custom blocks
@@ -526,8 +555,8 @@ namespace Rover
       */
     //% blockId="set_updateMode"
     //% block="set %updateMode|update mode"
-    //% weight=100
-    //% advanced=true
+    //% weight=40
+    //% subcategory=LEDs
     export function setUpdateMode(updateMode: eUpdateMode): void
     {
         _updateMode = updateMode;
@@ -538,8 +567,8 @@ namespace Rover
       */
     //% blockId="led_show"
     //% block="show LED changes"
-    //% weight=90
-    //% advanced=true
+    //% weight=30
+    //% subcategory=LEDs
     export function ledShow(): void
     {
         neo().show();
@@ -550,8 +579,8 @@ namespace Rover
      */
     //% blockId="led_rotate"
     //% block="rotate LEDs"
-    //% weight=80
-    //% advanced=true
+    //% weight=20
+    //% subcategory=LEDs
     export function ledRotate(): void
     {
         neo().rotate(1);
@@ -563,8 +592,8 @@ namespace Rover
      */
     //% blockId="led_shift"
     //% block="shift LEDs"
-    //% weight=70
-    //% advanced=true
+    //% weight=10
+    //% subcategory=LEDs
     export function ledShift(): void
     {
         neo().shift(1);
@@ -580,11 +609,56 @@ namespace Rover
       */
     //% blockId="convertRGB"
     //% block="convert from red %red| green %green| blue %blue"
-    //% weight=60
-    //% advanced=true
+    //% weight=5
+    //% subcategory=LEDs
     export function convertRGB(r: number, g: number, b: number): number
     {
         return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+    }
+
+// Keypad Blocks
+
+    /**
+      * Get numeric value of key
+      *
+      * @param key name of key
+      */
+    //% blockId="e_keyValue"
+    //% block=%keyName
+    //% weight=50
+    //% subcategory=Keypad
+    export function eKeyValue(keyName: eKeys): number
+    {
+        return keyName;
+    }
+
+    /**
+      * Wait for keypress
+      *
+      */
+    //% blockId="e_waitForKey"
+    //% block="wait for keypress"
+    //% weight=100
+    //% subcategory=Keypad
+    export function eWaitKey(): number
+    {
+        let keypad = 0;
+        pins.digitalWritePin(DigitalPin.P16, 1);
+        while (pins.digitalReadPin(DigitalPin.P15) == 0)
+    	    ;
+        while (pins.digitalReadPin(DigitalPin.P15) == 1)
+            ;
+        for (let index = 0; index <= 15; index++)
+        {
+            pins.digitalWritePin(DigitalPin.P16, 0)
+            control.waitMicros(2)
+            keypad = (keypad << 1) + pins.digitalReadPin(DigitalPin.P15)
+            pins.digitalWritePin(DigitalPin.P16, 1)
+            control.waitMicros(2)
+        }
+        keypad = 65535 - keypad
+        pins.digitalWritePin(DigitalPin.P16, 0)
+        return keypad;
     }
 
 }
