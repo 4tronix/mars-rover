@@ -652,21 +652,24 @@ namespace Rover
     export function eWaitKey(): number
     {
         let keypad = 0;
-        pins.digitalWritePin(DigitalPin.P16, 1); // set clock High
-        while (pins.digitalReadPin(DigitalPin.P15) == 1) // wait for SDO to go Low
-    	    ;
-        while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
-            ;
-        for (let index = 0; index <= 15; index++)
+        while (keypad == 0) // retry if zero data - bit of a hack
         {
-            pins.digitalWritePin(DigitalPin.P16, 0) // set clock Low
-            control.waitMicros(2)
-            keypad = (keypad << 1) + pins.digitalReadPin(DigitalPin.P15) // read the data
-            pins.digitalWritePin(DigitalPin.P16, 1) // set clock High again
-            control.waitMicros(2)
+            pins.digitalWritePin(DigitalPin.P16, 1); // set clock High
+            while (pins.digitalReadPin(DigitalPin.P15) == 1) // wait for SDO to go Low
+    	        ;
+            while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
+                ;
+            control.waitMicros(10);
+            for (let index = 0; index <= 15; index++)
+            {
+                pins.digitalWritePin(DigitalPin.P16, 0) // set clock Low
+                control.waitMicros(2)
+                keypad = (keypad << 1) + pins.digitalReadPin(DigitalPin.P15) // read the data
+                pins.digitalWritePin(DigitalPin.P16, 1) // set clock High again
+                control.waitMicros(2)
+            }
+            keypad = 65535 - keypad
         }
-        keypad = 65535 - keypad
-        //pins.digitalWritePin(DigitalPin.P16, 0)
         return keypad;
     }
 
