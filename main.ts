@@ -121,18 +121,9 @@ enum eKeys
     kSpinRight=0b0000000100000000,
     //% block="mast left"
     kMastLeft=0b1000000000000000,
+
     //% block="mast right"
-    kMastRight=0b0100000000000000,
-    //% block="cross"
-    kCross=0b0000000000000100,
-    //% block="tick"
-    kTick=0b0000000000000010,
-    //% block="pause"
-    kPause=0b0000000000000001,
-    //% block="save"
-    kSave=0b0010000000000000,
-    //% block="load"
-    kLoad=0b0001000000000000
+    kMastRight=0b0100000000000000
 }
 
 /**
@@ -646,30 +637,27 @@ namespace Rover
       *
       */
     //% blockId="e_waitForKey"
-    //% block="get keypress"
+    //% block="wait for keypress"
     //% weight=100
     //% subcategory=Keypad
     export function eWaitKey(): number
     {
         let keypad = 0;
-        while (keypad == 0) // retry if zero data - bit of a hack
+        pins.digitalWritePin(DigitalPin.P16, 1);
+        while (pins.digitalReadPin(DigitalPin.P15) == 0)
+    	    ;
+        while (pins.digitalReadPin(DigitalPin.P15) == 1)
+            ;
+        for (let index = 0; index <= 15; index++)
         {
-            pins.digitalWritePin(DigitalPin.P16, 1); // set clock High
-            while (pins.digitalReadPin(DigitalPin.P15) == 1) // wait for SDO to go Low
-    	        ;
-            while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
-                ;
-            control.waitMicros(10);
-            for (let index = 0; index <= 15; index++)
-            {
-                pins.digitalWritePin(DigitalPin.P16, 0) // set clock Low
-                control.waitMicros(2)
-                keypad = (keypad << 1) + pins.digitalReadPin(DigitalPin.P15) // read the data
-                pins.digitalWritePin(DigitalPin.P16, 1) // set clock High again
-                control.waitMicros(2)
-            }
-            keypad = 65535 - keypad
+            pins.digitalWritePin(DigitalPin.P16, 0)
+            control.waitMicros(2)
+            keypad = (keypad << 1) + pins.digitalReadPin(DigitalPin.P15)
+            pins.digitalWritePin(DigitalPin.P16, 1)
+            control.waitMicros(2)
         }
+        keypad = 65535 - keypad
+        pins.digitalWritePin(DigitalPin.P16, 0)
         return keypad;
     }
 
