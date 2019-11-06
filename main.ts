@@ -239,6 +239,10 @@ namespace Rover
 
         let i2cData = pins.createBuffer(2);
         let start = 0;
+        if (angle > 90)
+            angle = 90;
+        if (angle < -90)
+            angle = -90;
         let stop = 369 + (angle + servoOffset[servo]) * 223 / 90;
 
         i2cData[0] = SERVOS + servo*4 + 2;	// Servo register
