@@ -8,10 +8,10 @@ The speed is between 0 (stop) and 100 (full speed)
 Direction can be Forward or Reverse   
 ```blocks
 // Drive forward at speed 60
-Rover.move(eVector.Forward, 60, 2000)
+Rover.move(eVector.Forward, 60)
 
-// Drive backwards at speed 70 for 1000 ms
-Rover.move_milli(eVector.Reverse, 70, 1000)
+// Drive backwards at speed 70 for 2s
+Rover.move_milli(eVector.Reverse, 70, 2000)
 
 ```   
 
@@ -24,7 +24,7 @@ Rover.spin(eDirection.Left, 60)
 Rover.spin(eDirection.Right, 50)
 ```
 
-If you want more fine grain control of individal motors, use `Rovor.motor(..)` to drive motor either forward or reverse. The value
+If you want more fine grain control of individal motors, use `Rover.motor(..)` to drive motor either forward or reverse. The value
 indicates speed and is between `-1023` to `1023`. Minus indicates reverse.
 
 ```blocks
@@ -42,7 +42,8 @@ To turn an individual servo to a position from -90 to +90 degrees, use the setSe
 // Turn the Mast servo (servo 0) to 30 degrees
 Rover.setServo(0, 30)
 
-// You can also select the name of the servo for the 4 wheels and the mast using the getServoNumber(..) function. This command does the same as the one above
+// You can also select the name of the servo for the 4 wheels and the mast using the getServoNumber(..) function.
+This command does the same as the one above
 Rover.setServo(Rover.getServoNumber(eServos.Mast), 30)
 ```
 
@@ -52,7 +53,7 @@ To steer left, the front wheel servos need to point left and the rear servos to 
 Rover.steer(eDirection.Left, 30)
 
 // Turn the wheels to an angle of 45 degrees right - Rather excessive turn!
-Rover.steer(eDirection.Rightt, 45)
+Rover.steer(eDirection.Right, 45)
 
 // To point straight ahead, you can either steer with an angle of zero, or simply centre the wheel servos:
 Rover.zeroServos(eServoGroup.Wheel)
@@ -96,9 +97,7 @@ also use the `robobit.sonar(..)` function to read the distance to obstacles.
 
 ```blocks
 // Read sonar values
-let v1 = robobit.sonar(BBPingUnit.MicroSeconds);
-let v2 = robobit.sonar(BBPingUnit.Centimeters);
-let v3 = robobit.sonar(BBPingUnit.Inches);
+let distance = Rover.readSonar(ePingUnit.Centimeters);
 ```
 
 ## Smart RGB LEDs helpers
