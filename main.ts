@@ -327,7 +327,7 @@ namespace Rover
     }
 
     /**
-      * Set Servo Offset then zero the servo
+      * Set Servo Offset. Does not save to EEROM
       * @param servo Servo number (0 to 15)
       * @param angle degrees to turn servo (-90 to +90)
       */
@@ -337,8 +337,22 @@ namespace Rover
     //% subcategory=Servos
     export function setOffset(servo: number, offset: number): void
     {
+        servo = Math.max(Math.min(15, servo),0);
         servoOffset[servo] = offset;
-        setServo(servo, 0);
+    }
+
+    /**
+      * Get Servo Offset from memory. Does not load from EEROM
+      * @param servo Servo number (0 to 15)
+      */
+    //% blockId="getOffset"
+    //% block="get offset of servo %servo=e_servos"
+    //% weight=55
+    //% subcategory=Servos
+    export function getOffset(servo: number): number
+    {
+        servo = Math.max(Math.min(15, servo),0);
+        return servoOffset[servo];
     }
 
     /**
