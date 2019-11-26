@@ -1,10 +1,9 @@
-# PCB Rover
-Package for Microsoft Makecode
+# MARS Rover
 
-This library provides a Microsoft Makecode package for the 4tronix MARS Rover
+This library provides a Microsoft Makecode extension for the 4tronix MARS Rover
 
-## Driving the robot    
-The simplest way to drive robot is by using the `move_Milli(...)` and move(...)` blocks.
+## Driving the MARS Rover
+The simplest way to drive Rover is by using the `move_Milli(...)` and move(...)` blocks.
 The speed is between 0 (stop) and 100 (full speed)
 Direction can be Forward or Reverse   
 ```blocks
