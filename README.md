@@ -42,8 +42,8 @@ To turn an individual servo to a position from -90 to +90 degrees, use the setSe
 // Turn the Mast servo (servo 0) to 30 degrees
 Rover.setServo(0, 30)
 
-// You can also select the name of the servo for the 4 wheels and the mast using the getServoNumber(..) function.
-This command does the same as the one above
+// You can also select the name of the servo using the getServoNumber(..) function.
+// This command does the same as the one above
 Rover.setServo(Rover.getServoNumber(eServos.Mast), 30)
 ```
 
@@ -74,7 +74,7 @@ Rover.setOffset(Rover.getServoNumber(eServos.FL), 8)
 The EEROM on board the Rover stores the offsets for each servo to ensure that they are zero. However, there is plenty of room left, so it has been made acessible. You could store movement sequences, plan your daily journey, etc.
 Each data value is an 8-bit integer, so it can have a value from -128 to +127. The EEROM is 1024 bytes, but the first 16 are used only for the servo offsets, so 1008 bytes are available for the user
 ```blocks
-// To read a byte value from location 12 (in reallity this is location 28) in a variable myValue
+// To read a byte value from location 12 (in reality this is location 28) in a variable myValue
 myValue = Rover.readEEROM(12)
 
 // To write a value of 49 to location 12

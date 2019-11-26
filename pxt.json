@@ -1,11 +1,11 @@
 {
-    "name": "PCB-Rover",
-    "version": "0.0.1",
+    "name": "MARS-Rover",
+    "version": "0.0.2",
     "description": "Microsoft MakeCode package for 4tronix Rover",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:microsoft/pxt-neopixel#v0.6.2"
+        "neopixel": "github:microsoft/pxt-neopixel#v0.6.12"
     },
     "files": [
         "README.md",
