@@ -11,7 +11,20 @@ enum eServos
 }
 
 /**
-  * Enumeration of directions.
+  * Enumeration of servo groups
+  */
+enum eServoGroup
+{
+    //% block="wheel"
+    Wheel,
+    //% block="mast"
+    Mast,
+    //% block="all"
+    All
+}
+
+/**
+  * Enumeration of left/right directions
   */
 enum eDirection
 {
@@ -19,6 +32,17 @@ enum eDirection
     Left,
     //% block="right"
     Right
+}
+
+/**
+  * Enumeration of forward/reverse directions
+  */
+enum eVector
+{
+    //% block="forward"
+    Forward,
+    //% block="reverse"
+    Reverse
 }
 
 /**
@@ -185,8 +209,7 @@ namespace Rover
             pins.i2cWriteBuffer(PCA, i2cData, false);
         }
 
-	for (let i=0; i<16; i++)
-            servoOffset[i] = readEEROM(i);
+	loadOffsets();
     }
 
     // slow PWM frequency for slower speeds to improve torque
@@ -205,26 +228,61 @@ namespace Rover
 //  SERVO BLOCKS
 
     /**
-      * Initialise all servos to Angle=0
+      * Initialise wheel/mast/all servos to Angle=0
+      * param group which group of servos to centre
       */
     //% blockId="zeroServos"
-    //% block="Centre all servos"
+    //% block="Centre %group| servos"
     //% weight=100
     //% subcategory=Servos
-    export function zeroServos(): void
+    export function zeroServos(group: eServoGroup): void
     {
-        for (let i=0; i<16; i++)
-            setServo(i, 0);
+        switch(group)
+        {
+        case eServoGroup.Wheel:
+            setServo(getServoNumber(eServos.FL), 0);
+            setServo(getServoNumber(eServos.FR), 0);
+            setServo(getServoNumber(eServos.RL), 0);
+            setServo(getServoNumber(eServos.RR), 0);
+            break;
+        case eServoGroup.Mast:
+            setServo(getServoNumber(eServos.Mast), 0);
+            break;
+        default:
+            for (let i=0; i<16; i++)
+                setServo(i, 0);
+            break;
+        }
     }
 
     /**
-      * Set Servo Position by Angle
+      * Steer all wheels left or right by angle
+      * @param direction left or right
+      * @param angle angle to steer
+      */
+    //% blockId="e_steer"
+    //% block="steer %direction| by angle %angle"
+    //% weight=90
+    //% subcategory=Servos
+    export function steer(direction: eDirection, angle: number): void
+    { 
+        angle = Math.max(Math.min(90, angle),0);
+        if (direction==eDirection.Left)
+            angle = 0-angle;
+        setServo(getServoNumber(eServos.FL), angle);
+        setServo(getServoNumber(eServos.FR), angle);
+        setServo(getServoNumber(eServos.RL), 0-angle);
+        setServo(getServoNumber(eServos.RR), 0-angle);
+    }
+
+    /**
+      * Set individual Servo Position by Angle
       * @param servo Servo number (0 to 15)
       * @param angle degrees to turn servo (-90 to +90)
       */
     //% blockId="setServo"
-    //% block="set servo %servo| to angle %angle"
-    //% weight=90
+    //% block="set servo %servo=e_servos| to angle %angle"
+    //% weight=80
     //% subcategory=Servos
     export function setServo(servo: number, angle: number): void
     {
@@ -255,21 +313,6 @@ namespace Rover
     }
 
     /**
-      * Set Servo Offset then zero the servo
-      * @param servo Servo number (0 to 15)
-      * @param angle degrees to turn servo (-90 to +90)
-      */
-    //% blockId="setOffset"
-    //% block="set offset of servo %servo=e_servos| to %offset"
-    //% weight=80
-    //% subcategory=Servos
-    export function setOffset(servo: number, offset: number): void
-    {
-        servoOffset[servo] = offset;
-        setServo(servo, 0);
-    }
-
-    /**
       * Return servo number from name
       *
       * @param value servo name
@@ -283,36 +326,68 @@ namespace Rover
         return value;
     }
 
-// MOTOR BLOCKS
-
     /**
-      * Drive forward (or backward) at speed.
-      * @param speed speed of motor between -1023 and 1023. eg: 600
+      * Set Servo Offset then zero the servo
+      * @param servo Servo number (0 to 15)
+      * @param angle degrees to turn servo (-90 to +90)
       */
-    //% blockId="drive"
-    //% block="drive at speed %speed"
-    //% speed.min=-1023 speed.max=1023
-    //% weight=100
-    //% subcategory=Motors
-    export function drive(speed: number): void
+    //% blockId="setOffset"
+    //% block="set offset of servo %servo=e_servos| to %offset"
+    //% weight=60
+    //% subcategory=Servos
+    export function setOffset(servo: number, offset: number): void
     {
-        motor(eMotor.Both, speed);
+        servoOffset[servo] = offset;
+        setServo(servo, 0);
     }
 
     /**
-      * Drive robot forward (or backward) at speed for milliseconds.
-      * @param speed speed of motor between -1023 and 1023. eg: 600
-      * @param milliseconds duration in milliseconds to drive forward for, then stop. eg: 400
+      * Clear all Servo Offsets (does not save to EEROM)
       */
-    //% blockId="drive_milliseconds"
-    //% block="drive at speed %speed| for %milliseconds|(ms)"
-    //% speed.min=-1023 speed.max=1023
+    //% blockId="clearOffsets"
+    //% block="clear all servo offsets"
+    //% weight=50
+    //% subcategory=Servos
+    export function clearOffsets(): void
+    {
+        for (let i=0; i<16; i++)
+            servoOffset[i] = 0;
+    }
+
+// MOTOR BLOCKS
+
+    /**
+      * Drive forward (or backward) at selected speed
+      * @param direction select forwards or reverse
+      * @param speed speed of motor between 0 and 100. eg: 60
+      */
+    //% blockId="e_move"
+    //% block="move %direction| at speed %speed"
+    //% speed.min=0 speed.max=100
+    //% weight=100
+    //% subcategory=Motors
+    export function move(direction: eVector, speed: number): void
+    {
+        speed = Math.max(Math.min(100, speed),0);
+        motor(eMotor.Both, direction, speed);
+    }
+
+    /**
+      * Drive forward (or backward) at selected speed for milliseconds
+      * @param direction select forwards or reverse
+      * @param speed speed of motor between 0 and 100. eg: 60
+      * @param millis duration in milliseconds to move, then stop. eg: 400
+      */
+    //% blockId="e_move_milli"
+    //% block="move %direction| at speed %speed| for %millis|(ms)"
+    //% speed.min=0 speed.max=100
     //% weight=90
     //% subcategory=Motors
-    export function driveMilliseconds(speed: number, milliseconds: number): void
+    export function move_milli(direction: eVector, speed: number, millis: number): void
     {
-        drive(speed);
-        basic.pause(milliseconds);
+        speed = Math.max(Math.min(100, speed),0);
+        motor(eMotor.Both, direction, speed);
+        basic.pause(millis);
         stop(eStopMode.Coast);
     }
 
@@ -335,20 +410,23 @@ namespace Rover
     }
 
     /**
-      * Drive motor(s) forward or reverse.
+      * Drive motors forward or reverse.
       * @param motor motor to drive.
-      * @param speed speed of motor eg: 600
+      * @param direction select forwards or reverse
+      * @param speed speed of motor eg: 60
       */
     //% blockId="motor"
-    //% block="drive %motor| motor at speed %speed"
+    //% block="drive %motor| motors %direction| at speed %speed"
     //% weight=70
+    //% speed.min=0 speed.max=100
     //% subcategory=Motors
-    export function motor(motor: eMotor, speed: number): void
+    export function motor(motor: eMotor, direction: eVector, speed: number): void
     {
+        speed = Math.max(Math.min(100, speed),0) * 10.23;
         let speed0 = 0;
         let speed1 = 0;
-        setPWM(Math.abs(speed));
-        if (speed > 0)
+        setPWM(speed);
+        if (direction == eVector.Forward)
         {
             speed0 = speed;
             speed1 = 0;
@@ -371,6 +449,34 @@ namespace Rover
         }
     }
 
+
+    /**
+      * Spin Left or Right at Speed
+      * @param direction left or right
+      * @param speed from 0 to 100. eg: 60
+      */
+    //% blockId="e_spin"
+    //% block="spin %direction| at speed %speed"
+    //% weight=85
+    //% subcategory=Motors
+    export function spin(direction: eDirection, speed: number): void
+    { 
+        speed=Math.max(Math.min(100, speed),0);
+        setServo(getServoNumber(eServos.FL), 45);
+        setServo(getServoNumber(eServos.FR), -45);
+        setServo(getServoNumber(eServos.RL), -45);
+        setServo(getServoNumber(eServos.RR), 45);
+        if (direction==eDirection.Left)
+        {
+            motor(eMotor.Left, eVector.Reverse, speed);
+            motor(eMotor.Right, eVector.Forward, speed);
+        }
+        else
+        {
+            motor(eMotor.Left, eVector.Forward, speed);
+            motor(eMotor.Right, eVector.Reverse, speed);
+        }
+    }
 
 // SENSOR BLOCKS
     /**
@@ -425,14 +531,19 @@ namespace Rover
     //% subcategory=EEROM
     export function writeEEROM(data: number, address: number): void
     {
-        /*let i2cData = pins.createBuffer(3);
+        wrEEROM(data, address + 16);
+    }
+
+    // Uses bottom 16 bytes of EEROM for servo offsets. No user access
+    function wrEEROM(data: number, address: number): void
+    {
+        let i2cData = pins.createBuffer(3);
 
         i2cData[0] = address >> 8;	// address MSB
         i2cData[1] = address & 0xff;	// address LSB
         i2cData[2] = data & 0xff;
         pins.i2cWriteBuffer(EEROM, i2cData, false);
-        //servoOffset[address] = data;	// update servo offset as well - lazy coding
-        basic.pause(1);			// needs a short pause. << 1ms ok? */
+        basic.pause(1);			// needs a short pause. << 1ms ok?
     }
 
     /**
@@ -445,15 +556,47 @@ namespace Rover
     //% subcategory=EEROM
     export function readEEROM(address: number): number
     {
-        return 0;
-        /*let i2cRead = pins.createBuffer(2);
+        return rdEEROM(address + 16);
+    }
+
+    // Uses bottom 16 bytes of EEROM for servo offsets. No user access
+    function rdEEROM(address: number): number
+    {
+        let i2cRead = pins.createBuffer(2);
 
         i2cRead[0] = address >> 8;	// address MSB
         i2cRead[1] = address & 0xff;	// address LSB
         pins.i2cWriteBuffer(EEROM, i2cRead, false);
         basic.pause(1);
-        return pins.i2cReadNumber(EEROM, NumberFormat.Int8LE);*/
+        return pins.i2cReadNumber(EEROM, NumberFormat.Int8LE);
     }
+
+    /**
+      * Load servo offsets from EEROM
+      */
+    //% blockId="loadOffsets"
+    //% block="Load servo offsets from EEROM"
+    //% weight=80
+    //% subcategory=EEROM
+    export function loadOffsets(): void
+    {
+	for (let i=0; i<16; i++)
+            servoOffset[i] = rdEEROM(i);
+    }
+
+    /**
+      * Save servo offsets to EEROM
+      */
+    //% blockId="saveOffsets"
+    //% block="Save servo offsets to EEROM"
+    //% weight=70
+    //% subcategory=EEROM
+    export function saveOffsets(): void
+    {
+	for (let i=0; i<16; i++)
+            wrEEROM(servoOffset[i],i);
+    }
+
 
 // LED Blocks
 
@@ -570,6 +713,7 @@ namespace Rover
     //% block="set %updateMode|update mode"
     //% weight=40
     //% subcategory=LEDs
+    //% deprecated=true
     export function setUpdateMode(updateMode: eUpdateMode): void
     {
         _updateMode = updateMode;
@@ -582,6 +726,7 @@ namespace Rover
     //% block="show LED changes"
     //% weight=30
     //% subcategory=LEDs
+    //% deprecated=true
     export function ledShow(): void
     {
         neo().show();
@@ -594,6 +739,7 @@ namespace Rover
     //% block="rotate LEDs"
     //% weight=20
     //% subcategory=LEDs
+    //% deprecated=true
     export function ledRotate(): void
     {
         neo().rotate(1);
@@ -607,6 +753,7 @@ namespace Rover
     //% block="shift LEDs"
     //% weight=10
     //% subcategory=LEDs
+    //% deprecated=true
     export function ledShift(): void
     {
         neo().shift(1);
