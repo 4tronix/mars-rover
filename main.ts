@@ -448,7 +448,7 @@ namespace Rover
         else
         {
             speed0 = 0;
-            speed1 = 0 - speed;
+            speed1 = speed;
         }
         if ((motor == eMotor.Left) || (motor == eMotor.Both))
         {
