@@ -445,7 +445,7 @@ namespace Rover
             speed0 = speed;
             speed1 = 0;
         }
-        else
+        else // must be Reverse
         {
             speed0 = 0;
             speed1 = speed;
