@@ -823,7 +823,9 @@ namespace Rover
             while (pins.digitalReadPin(DigitalPin.P15) == 1) // wait for SDO to go Low
     	        ;
             while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
-                ;
+	    {
+	    	basic.pause(1);	// stop thread blocking
+	    }
             control.waitMicros(10);
             for (let index = 0; index <= 15; index++)
             {
