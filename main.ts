@@ -817,14 +817,22 @@ namespace Rover
     export function eWaitKey(): number
     {
         let keypad = 0;
+        let count = 0;
         while (keypad == 0) // retry if zero data - bit of a hack
         {
             pins.digitalWritePin(DigitalPin.P16, 1); // set clock High
             while (pins.digitalReadPin(DigitalPin.P15) == 1) // wait for SDO to go Low
-    	        ;
-            while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
-                ;
-            control.waitMicros(10);
+            {
+                count += 1;
+                if (count > 1000)
+                {
+                    count = 0;
+                    basic.pause(1)
+                }
+            }
+            //while (pins.digitalReadPin(DigitalPin.P15) == 0) // wait for SDO to go High again
+            //    ;
+            //control.waitMicros(10);
             for (let index = 0; index <= 15; index++)
             {
                 pins.digitalWritePin(DigitalPin.P16, 0) // set clock Low
