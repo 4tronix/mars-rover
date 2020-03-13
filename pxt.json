@@ -9,7 +9,7 @@
     },
     "files": [
         "README.md",
-        "main.ts"
+        "rover.ts"
     ],
     "testFiles": [
         "tests.ts"
