@@ -1,11 +1,11 @@
 {
     "name": "MARS-Rover",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Microsoft MakeCode package for 4tronix Rover",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:microsoft/pxt-neopixel#v0.6.12"
+        "fireled": "github:4tronix/FireLedsBase#0.1.2"
     },
     "files": [
         "README.md",

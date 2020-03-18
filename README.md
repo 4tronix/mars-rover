@@ -100,13 +100,15 @@ also use the `robobit.sonar(..)` function to read the distance to obstacles.
 let distance = Rover.readSonar(ePingUnit.Centimeters);
 ```
 
-## Smart RGB LEDs helpers
+## FireLed Functions
 
-The MARS Rover has 4 Smart RGB LEDs. One in each corner. There is a set of commands to control them
+The MARS Rover has 4 FireLeds. One in each corner. There is a set of commands to control them
 
 ```blocks
-// Set all LEDs to Red
-Rover.setLedColor(Rover.eColours(eColors.Red))
+// Set all FireLeds to Green (hard-coded RGB color)
+Rover.setLedColor(0x00FF00)
+// Set all FireLeds to Green (built-in colour selection)
+Rover.setLedColor(eColors.Green)
 
 // Clear all LEDs
 Rover.ledClear()
