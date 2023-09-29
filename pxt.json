@@ -1,11 +1,11 @@
 {
     "name": "MARS-Rover",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "description": "Microsoft MakeCode package for 4tronix Rover",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "fireled": "github:4tronix/FireLedsBase#0.1.2"
+        "fireled": "github:4tronix/FireLedsBase#1.2.0"
     },
     "files": [
         "README.md",
