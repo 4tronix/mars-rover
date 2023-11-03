@@ -1,6 +1,6 @@
 # MARS Rover
 
-This library provides a Microsoft Makecode extension for the 4tronix MARS Rover
+This library provides a Microsoft Makecode extension for the [4tronix M.A.R.S. Rover](https://shop.4tronix.co.uk/products/marsrover)
 
 ## Driving the MARS Rover
 The simplest way to drive Rover is by using the `move_Milli(...)` and move(...)` blocks.
