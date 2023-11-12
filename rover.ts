@@ -1,19 +1,24 @@
 ﻿/**
   * Enumeration of servos
   */
-enum eServos
+enum RVservos
 {
-    FL=9,
-    RL=11,
-    RR=13,
-    FR=15,
+    //% block="front left"
+    FrontLeft=9,
+    //% block="rear left"
+    RearLeft=11,
+    //% block="rear right"
+    RearRight=13,
+    //% block="front right"
+    FrontRight=15,
+    //% block="mast"
     Mast=0
 }
 
 /**
   * Enumeration of servo groups
   */
-enum eServoGroup
+enum RVservoGroup
 {
     //% block="wheel"
     Wheel,
@@ -26,7 +31,7 @@ enum eServoGroup
 /**
   * Enumeration of left/right directions
   */
-enum eDirection
+enum RVdirection
 {
     //% block="left"
     Left,
@@ -37,7 +42,7 @@ enum eDirection
 /**
   * Enumeration of forward/reverse directions
   */
-enum eVector
+enum RVvector
 {
     //% block="forward"
     Forward,
@@ -48,7 +53,7 @@ enum eVector
 /**
  * Ping unit for sensor
  */
-enum ePingUnit
+enum RVpingUnit
 {
     //% block="cm"
     Centimeters,
@@ -61,7 +66,7 @@ enum ePingUnit
 /**
   * Enumeration of motors.
   */
-enum eMotor
+enum RVmotor
 {
     //% block="left"
     Left,
@@ -74,7 +79,7 @@ enum eMotor
 /**
   * Stop modes. Coast or Brake
   */
-enum eStopMode
+enum RVstopMode
 {
     //% block="no brake"
     Coast,
@@ -87,7 +92,7 @@ enum eStopMode
   * setting to Manual requires show LED changes blocks
   * setting to Auto will update the LEDs every time they change
   */
-enum eUpdateMode
+enum RVupdateMode
 {
     Manual,
     Auto
@@ -96,75 +101,80 @@ enum eUpdateMode
 /**
   * Pre-Defined LED colours
   */
-enum eColors
+enum RVcolors
 {
-    //% block=red
-    Red = 0xff0000,
-    //% block=orange
-    Orange = 0xffa500,
-    //% block=yellow
-    Yellow = 0xffff00,
-    //% block=green
-    Green = 0x00ff00,
-    //% block=blue
-    Blue = 0x0000ff,
-    //% block=indigo
-    Indigo = 0x4b0082,
-    //% block=violet
-    Violet = 0x8a2be2,
-    //% block=purple
-    Purple = 0xff00ff,
-    //% block=white
-    White = 0xffffff,
-    //% block=black
-    Black = 0x000000
+    Red=0,
+    OliveGreen=1,
+    BrightGreen=2,
+    LightGreen=3,
+    Green=4,
+    BurntOrange=5,
+    DarkBrown=6,
+    Brown=7,
+    Turquoise=8,
+    BlueGreen=9,
+    Orange=10,
+    Maroon=11,
+    Purple=12,
+    Violet=13,
+    LightBlue=14,
+    Yellow=15,
+    Indigo=16,
+    MediumBlue=17,
+    Blue=18,
+    White=19,
+    Pink=20,
+    PaleGreen=21,
+    PaleBlue=22,
+    Grey=23,
+    Black=24
 }
+    //% color.fieldOptions.colours='["#FF0000","#659900","#18E600","#80FF00","#00FF00","#FF8000","#D82600","#B24C00","#00FFC0","#00FF80","#FFC000","#FF0080","#FF00FF","#B09EFF","#00FFFF","#FFFF00","#8000FF","#0080FF","#0000FF","#FFFFFF","#FF8080","#80FF80","#40C0FF","#999999","#000000"]'
 
 /**
   * Keypad keys
   */
-enum eKeys
+enum RVkeys
 {
     //% block="stop"
-    kStop=0b0000000010000000,
+    Kstop=0b0000000010000000,
     //% block="forward"
-    kForward=0b0000010000000000,
+    Kforward=0b0000010000000000,
     //% block="reverse"
-    kReverse=0b0000000000010000,
+    Kreverse=0b0000000000010000,
     //% block="forward left"
-    kForwardLeft=0b0000001000000000,
+    KforwardLeft=0b0000001000000000,
     //% block="forward right"
-    kForwardRight=0b0000100000000000,
+    KforwardRight=0b0000100000000000,
     //% block="reverse left"
-    kReverseLeft=0b0000000000001000,
+    KreverseLeft=0b0000000000001000,
     //% block="reverse right"
-    kReverseRight=0b0000000000100000,
+    KreverseRight=0b0000000000100000,
     //% block="spin left"
-    kSpinLeft=0b0000000001000000,
+    KspinLeft=0b0000000001000000,
     //% block="spin right"
-    kSpinRight=0b0000000100000000,
+    KspinRight=0b0000000100000000,
     //% block="mast left"
-    kMastLeft=0b1000000000000000,
+    KmastLeft=0b1000000000000000,
     //% block="mast right"
-    kMastRight=0b0100000000000000,
+    KmastRight=0b0100000000000000,
     //% block="cross"
-    kCross=0b0000000000000100,
+    Kcross=0b0000000000000100,
     //% block="tick"
-    kTick=0b0000000000000010,
+    Ktick=0b0000000000000010,
     //% block="pause"
-    kPause=0b0000000000000001,
+    Kpause=0b0000000000000001,
     //% block="save"
-    kSave=0b0010000000000000,
+    Ksave=0b0010000000000000,
     //% block="load"
-    kLoad=0b0001000000000000
+    Kload=0b0001000000000000
 }
 
 /**
- * Custom blocks
+ * Blocks to operate 4tronix M.A.R.S. Rover
  */
-
 //% weight=10 color=#e7660b icon="\uf135"
-namespace Rover
+namespace marsRover
 {
     let PCA = 0x40;	// i2c address of 4tronix Animoid servo controller
     let EEROM = 0x50;	// i2c address of EEROM
@@ -172,9 +182,9 @@ namespace Rover
     let SERVOS = 0x06; // first servo address for start byte low
     let leftSpeed = 0;
     let rightSpeed = 0;
-    let servoOffset: number[] = [];
+    let servoOffsets: number[] = [];
     let fireBand: fireled.Band;
-    let _updateMode = eUpdateMode.Auto;
+    let _updateMode = RVupdateMode.Auto;
 
 
 // HELPER FUNCTIONS
@@ -234,24 +244,24 @@ namespace Rover
 
     /**
       * Initialise wheel/mast/all servos to Angle=0
-      * param group which group of servos to centre
+      * @param group which group of servos to centre
       */
     //% blockId="zeroServos"
-    //% block="Centre %group|servos"
+    //% block="centre %group|servos"
     //% weight=100
     //% subcategory=Servos
-    export function zeroServos(group: eServoGroup): void
+    export function zeroServos(group: RVservoGroup): void
     {
         switch(group)
         {
-            case eServoGroup.Wheel:
-                setServo(getServoNumber(eServos.FL), 0);
-                setServo(getServoNumber(eServos.FR), 0);
-                setServo(getServoNumber(eServos.RL), 0);
-                setServo(getServoNumber(eServos.RR), 0);
+            case RVservoGroup.Wheel:
+                setServo(servoNumber(RVservos.FrontLeft), 0);
+                setServo(servoNumber(RVservos.FrontRight), 0);
+                setServo(servoNumber(RVservos.RearLeft), 0);
+                setServo(servoNumber(RVservos.RearRight), 0);
                 break;
-            case eServoGroup.Mast:
-                setServo(getServoNumber(eServos.Mast), 0);
+            case RVservoGroup.Mast:
+                setServo(servoNumber(RVservos.Mast), 0);
                 break;
             default:
                 for (let i=0; i<16; i++)
@@ -265,19 +275,19 @@ namespace Rover
       * @param direction left or right
       * @param angle angle to steer
       */
-    //% blockId="e_steer"
-    //% block="steer %direction| by angle %angle"
+    //% blockId="steer"
+    //% block="steer %direction|by angle%angle"
     //% weight=90
     //% subcategory=Servos
-    export function steer(direction: eDirection, angle: number): void
+    export function steer(direction: RVdirection, angle: number): void
     { 
         angle = clamp(angle, 0, 90);
-        if (direction==eDirection.Left)
+        if (direction==RVdirection.Left)
             angle = 0-angle;
-        setServo(getServoNumber(eServos.FL), angle);
-        setServo(getServoNumber(eServos.FR), angle);
-        setServo(getServoNumber(eServos.RL), 0-angle);
-        setServo(getServoNumber(eServos.RR), 0-angle);
+        setServo(servoNumber(RVservos.FrontLeft), angle);
+        setServo(servoNumber(RVservos.FrontRight), angle);
+        setServo(servoNumber(RVservos.RearLeft), 0-angle);
+        setServo(servoNumber(RVservos.RearRight), 0-angle);
     }
 
     /**
@@ -286,7 +296,7 @@ namespace Rover
       * @param angle degrees to turn servo (-90 to +90)
       */
     //% blockId="setServo"
-    //% block="set servo %servo=e_servos| to angle %angle"
+    //% block="set servo %servo=servoNumber|to angle%angle"
     //% weight=80
     //% subcategory=Servos
     export function setServo(servo: number, angle: number): void
@@ -303,7 +313,7 @@ namespace Rover
         let i2cData = pins.createBuffer(2);
         let start = 0;
         angle = clamp(angle, -90, 90);
-        let stop = 369 + (angle + servoOffset[servo]) * 223 / 90;
+        let stop = 369 + (angle + servoOffsets[servo]) * 223 / 90;
 
         i2cData[0] = SERVOS + servo*4 + 2;	// Servo register
         i2cData[1] = (stop & 0xff);		// low byte stop
@@ -318,11 +328,11 @@ namespace Rover
       * Return servo number from name
       * @param value servo name
       */
-    //% blockId="e_servos"
+    //% blockId="servoNumber"
     //% block="%value"
     //% weight=70
     //% subcategory=Servos
-    export function getServoNumber(value: eServos): number
+    export function servoNumber(value: RVservos): number
     {
         return value;
     }
@@ -333,27 +343,27 @@ namespace Rover
       * @param angle degrees to turn servo (-90 to +90)
       */
     //% blockId="setOffset"
-    //% block="set offset of servo %servo=e_servos| to %offset"
+    //% block="set offset of servo %servo=servoNumber| to %offset"
     //% weight=60
     //% subcategory=Servos
     export function setOffset(servo: number, offset: number): void
     {
         servo = clamp(servo, 0, 15);
-        servoOffset[servo] = offset;
+        servoOffsets[servo] = offset;
     }
 
     /**
       * Get Servo Offset from memory. Does not load from EEROM
       * @param servo Servo number (0 to 15)
       */
-    //% blockId="getOffset"
-    //% block="get offset of servo %servo=e_servos"
+    //% blockId="servoOffset"
+    //% block="offset of servo %servo=servoNumber"
     //% weight=55
     //% subcategory=Servos
-    export function getOffset(servo: number): number
+    export function servoOffset(servo: number): number
     {
         servo = clamp(servo, 0, 15);
-        return servoOffset[servo];
+        return servoOffsets[servo];
     }
 
     /**
@@ -366,7 +376,7 @@ namespace Rover
     export function clearOffsets(): void
     {
         for (let i=0; i<16; i++)
-            servoOffset[i] = 0;
+            servoOffsets[i] = 0;
     }
 
 // MOTOR BLOCKS
@@ -376,15 +386,15 @@ namespace Rover
       * @param direction select forwards or reverse
       * @param speed speed of motor between 0 and 100. eg: 60
       */
-    //% blockId="e_move"
+    //% blockId="move"
     //% block="move %direction| at speed %speed"
     //% speed.min=0 speed.max=100
     //% weight=100
     //% subcategory=Motors
-    export function move(direction: eVector, speed: number): void
+    export function move(direction: RVvector, speed: number): void
     {
         speed = clamp(speed, 0, 100);
-        motor(eMotor.Both, direction, speed);
+        motor(RVmotor.Both, direction, speed);
     }
 
     /**
@@ -393,31 +403,30 @@ namespace Rover
       * @param speed speed of motor between 0 and 100. eg: 60
       * @param millis duration in milliseconds to move, then stop. eg: 400
       */
-    //% blockId="e_move_milli"
+    //% blockId="eMoveMilli"
     //% block="move %direction| at speed %speed| for %millis|(ms)"
     //% speed.min=0 speed.max=100
     //% weight=90
     //% subcategory=Motors
-    export function move_milli(direction: eVector, speed: number, millis: number): void
+    export function moveMilli(direction: RVvector, speed: number, millis: number): void
     {
         speed = clamp(speed, 0, 100);
-        motor(eMotor.Both, direction, speed);
+        motor(RVmotor.Both, direction, speed);
         basic.pause(millis);
-        stop(eStopMode.Coast);
+        stop(RVstopMode.Coast);
     }
 
     /**
       * Stop rover by coasting slowly to a halt or braking
       * @param mode Brakes on or off
       */
-    //% blockId="rover_stop" block="stop with %mode"
+    //% blockId="stop"
+    //% block="stop with %mode"
     //% weight=80
     //% subcategory=Motors
-    export function stop(mode: eStopMode): void
+    export function stop(mode: RVstopMode): void
     {
-        let stopMode = 0;
-        if (mode == eStopMode.Brake)
-            stopMode = 1;
+        let stopMode = (mode == RVstopMode.Brake) ? 1 :0;
         pins.digitalWritePin(DigitalPin.P1, stopMode);
         pins.digitalWritePin(DigitalPin.P12, stopMode);
         pins.digitalWritePin(DigitalPin.P8, stopMode);
@@ -431,17 +440,17 @@ namespace Rover
       * @param speed speed of motor eg: 60
       */
     //% blockId="motor"
-    //% block="drive %motor| motors %direction| at speed %speed"
+    //% block="drive %motor|motors %direction|at speed %speed"
     //% weight=70
     //% speed.min=0 speed.max=100
     //% subcategory=Motors
-    export function motor(motor: eMotor, direction: eVector, speed: number): void
+    export function motor(motor: RVmotor, direction: RVvector, speed: number): void
     {
         speed = clamp(speed, 0, 100) * 10.23;
         let speed0 = 0;
         let speed1 = 0;
         setPWM(speed);
-        if (direction == eVector.Forward)
+        if (direction == RVvector.Forward)
         {
             speed0 = speed;
             speed1 = 0;
@@ -451,13 +460,13 @@ namespace Rover
             speed0 = 0;
             speed1 = speed;
         }
-        if ((motor == eMotor.Left) || (motor == eMotor.Both))
+        if ((motor == RVmotor.Left) || (motor == RVmotor.Both))
         {
             pins.analogWritePin(AnalogPin.P1, speed0);
             pins.analogWritePin(AnalogPin.P12, speed1);
         }
 
-        if ((motor == eMotor.Right) || (motor == eMotor.Both))
+        if ((motor == RVmotor.Right) || (motor == RVmotor.Both))
         {
             pins.analogWritePin(AnalogPin.P8, speed0);
             pins.analogWritePin(AnalogPin.P0, speed1);
@@ -470,26 +479,26 @@ namespace Rover
       * @param direction left or right
       * @param speed from 0 to 100. eg: 60
       */
-    //% blockId="e_spin"
+    //% blockId="spin"
     //% block="spin %direction| at speed %speed"
     //% weight=85
     //% subcategory=Motors
-    export function spin(direction: eDirection, speed: number): void
+    export function spin(direction: RVdirection, speed: number): void
     { 
         speed = clamp(speed, 0, 100);
-        setServo(getServoNumber(eServos.FL), 45);
-        setServo(getServoNumber(eServos.FR), -45);
-        setServo(getServoNumber(eServos.RL), -45);
-        setServo(getServoNumber(eServos.RR), 45);
-        if (direction==eDirection.Left)
+        setServo(servoNumber(RVservos.FrontLeft), 45);
+        setServo(servoNumber(RVservos.FrontRight), -45);
+        setServo(servoNumber(RVservos.RearLeft), -45);
+        setServo(servoNumber(RVservos.RearRight), 45);
+        if (direction==RVdirection.Left)
         {
-            motor(eMotor.Left, eVector.Reverse, speed);
-            motor(eMotor.Right, eVector.Forward, speed);
+            motor(RVmotor.Left, RVvector.Reverse, speed);
+            motor(RVmotor.Right, RVvector.Forward, speed);
         }
         else
         {
-            motor(eMotor.Left, eVector.Forward, speed);
-            motor(eMotor.Right, eVector.Reverse, speed);
+            motor(RVmotor.Left, RVvector.Forward, speed);
+            motor(RVmotor.Right, RVvector.Reverse, speed);
         }
     }
 
@@ -503,7 +512,7 @@ namespace Rover
     //% block="read sonar as %unit"
     //% weight=100
     //% subcategory=Sensors
-    export function readSonar(unit: ePingUnit): number
+    export function readSonar(unit: RVpingUnit): number
     {
         // send pulse
         let trig = DigitalPin.P13;
@@ -525,8 +534,8 @@ namespace Rover
         }
         switch (unit)
         {
-            case ePingUnit.Centimeters: return Math.round(d / 58);
-            case ePingUnit.Inches: return Math.round(d / 148);
+            case RVpingUnit.Centimeters: return Math.round(d / 58);
+            case RVpingUnit.Inches: return Math.round(d / 148);
             default: return d;
         }
     }
@@ -540,7 +549,7 @@ namespace Rover
       * @param data Byte of data to write
       */
     //% blockId="writeEEROM"
-    //% block="write %data| to address %address"
+    //% block="write %data|to address %address"
     //% data.min = -128 data.max = 127
     //% weight=100
     //% subcategory=EEROM
@@ -590,26 +599,26 @@ namespace Rover
       * Load servo offsets from EEROM
       */
     //% blockId="loadOffsets"
-    //% block="Load servo offsets from EEROM"
+    //% block="load servo offsets from EEROM"
     //% weight=80
     //% subcategory=EEROM
     export function loadOffsets(): void
     {
 	for (let i=0; i<16; i++)
-            servoOffset[i] = rdEEROM(i);
+            servoOffsets[i] = rdEEROM(i);
     }
 
     /**
       * Save servo offsets to EEROM
       */
     //% blockId="saveOffsets"
-    //% block="Save servo offsets to EEROM"
+    //% block="save servo offsets to EEROM"
     //% weight=70
     //% subcategory=EEROM
     export function saveOffsets(): void
     {
 	for (let i=0; i<16; i++)
-            wrEEROM(servoOffset[i],i);
+            wrEEROM(servoOffsets[i],i);
     }
 
 
@@ -629,7 +638,7 @@ namespace Rover
     // update FireLeds if _updateMode set to Auto
     function updateLEDs(): void
     {
-        if (_updateMode == eUpdateMode.Auto)
+        if (_updateMode == RVupdateMode.Auto)
             fire().updateBand();
     }
 
@@ -637,7 +646,7 @@ namespace Rover
       * Sets all LEDs to a given color (range 0-255 for r, g, b).
       * @param rgb RGB color of the LED
       */
-    //% blockId="SetLedColor" block="set all LEDs to%rgb=e_colours"
+    //% blockId="setLedColor" block="set all LEDs to%rgb=colourSelect"
     //% weight=100
     //% subcategory=FireLeds
     //% blockGap=8
@@ -650,7 +659,7 @@ namespace Rover
     /**
       * Clear all leds.
       */
-    //% blockId="LedClear" block="clear all LEDs"
+    //% blockId="ledClear" block="clear all LEDs"
     //% weight=90
     //% subcategory=FireLeds
     //% blockGap=8
@@ -666,7 +675,7 @@ namespace Rover
      * @param ledId position of the LED (0 to 3)
      * @param rgb RGB color of the LED
      */
-    //% blockId="SetPixelColor" block="set LED at%ledId|to%rgb=e_colours"
+    //% blockId="setPixelColor" block="set LED at%ledId|to%rgb=colourSelect"
     //% weight=80
     //% subcategory=FireLeds
     //% blockGap=8
@@ -681,7 +690,8 @@ namespace Rover
      * Set the brightness of the LEDs
      * @param brightness a measure of LED brightness in 0-255. eg: 40
      */
-    //% blockId="LedBrightness" block="set LED brightness%brightness"
+    //% blockId="ledBrightness"
+    //% block="set LED brightness%brightness"
     //% brightness.min=0 brightness.max=255
     //% weight=70
     //% subcategory=FireLeds
@@ -695,7 +705,8 @@ namespace Rover
     /**
       * Shows a rainbow pattern on all LEDs.
       */
-    //% blockId="LedRainbow" block="set LED rainbow"
+    //% blockId="ledRainbow"
+    //% block="set LED rainbow"
     //% weight=60
     //% subcategory=FireLeds
     //% blockGap=8
@@ -707,21 +718,22 @@ namespace Rover
 
     /**
       * Get numeric value of colour
-      * @param color Standard RGB Led Colours eg: #ff0000
+      * @param color Standard RGB Led Colours 
       */
-    //% blockId="e_colours" block=%color
+    //% blockId="colourSelect"
+    //% block=%color
     //% blockHidden=false
     //% weight=50
     //% subcategory=FireLeds
     //% blockGap=8
-    //% shim=TD_ID colorSecondary="#e7660b"
+    //% shim=TD_ID colorSecondary="0xe7660b"
     //% color.fieldEditor="colornumber"
     //% color.fieldOptions.decompileLiterals=true
-    //% color.defl='#ff0000'
+    //% color.defl='0xff0000'
     //% color.fieldOptions.colours='["#FF0000","#659900","#18E600","#80FF00","#00FF00","#FF8000","#D82600","#B24C00","#00FFC0","#00FF80","#FFC000","#FF0080","#FF00FF","#B09EFF","#00FFFF","#FFFF00","#8000FF","#0080FF","#0000FF","#FFFFFF","#FF8080","#80FF80","#40C0FF","#999999","#000000"]'
     //% color.fieldOptions.columns=5
     //% color.fieldOptions.className='rgbColorPicker'
-    export function eColours(color: number): number
+    export function colourSelect(color: number): number
     {
         return color;
     }
@@ -734,7 +746,7 @@ namespace Rover
       * @param blue Blue value of the LED (0 to 255)
       */
     //% blockId="convertRGB"
-    //% block="convert from red %red| green %green| blue %blue"
+    //% block="convert from red %red|green %green|blue %blue"
     //% weight=40
     //% subcategory=FireLeds
     export function convertRGB(r: number, g: number, b: number): number
@@ -746,14 +758,13 @@ namespace Rover
 
     /**
       * Get numeric value of key
-      *
       * @param key name of key
       */
-    //% blockId="e_keyValue"
+    //% blockId="keyValue"
     //% block=%keyName
     //% weight=50
     //% subcategory=Keypad
-    export function eKeyValue(keyName: eKeys): number
+    export function keyValue(keyName: RVkeys): number
     {
         return keyName;
     }
@@ -762,11 +773,11 @@ namespace Rover
       * Wait for keypress
       *
       */
-    //% blockId="e_waitForKey"
+    //% blockId="waitForKey"
     //% block="get keypress"
     //% weight=100
     //% subcategory=Keypad
-    export function eWaitKey(): number
+    export function waitForKey(): number
     {
         let keypad = 0;
         let count = 0;

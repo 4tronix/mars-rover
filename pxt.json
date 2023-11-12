@@ -1,7 +1,7 @@
 {
-    "name": "MARS-Rover",
-    "version": "1.0.1",
-    "description": "Microsoft MakeCode package for 4tronix M.A.R.S. Rover",
+    "name": "mars-rover",
+    "version": "1.1.0",
+    "description": "MakeCode extension for 4tronix M.A.R.S. Rover",
     "license": "MIT",
     "dependencies": {
         "core": "*",
@@ -12,7 +12,7 @@
         "rover.ts"
     ],
     "testFiles": [
-        "tests.ts"
+        "test.ts"
     ],
     "yotta": {},
     "public": true
