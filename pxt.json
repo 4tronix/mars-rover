@@ -1,11 +1,11 @@
 {
     "name": "mars-rover",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "MakeCode extension for 4tronix M.A.R.S. Rover",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "fireled": "github:4tronix/FireLedsBase#1.2.0"
+        "fireled": "github:4tronix/FireLedsBase2"
     },
     "files": [
         "README.md",
