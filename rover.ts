@@ -171,6 +171,90 @@ enum RVkeys
 }
 
 /**
+  * IR Key code translations
+  */
+enum RVirKeys
+{
+    //% block="any"
+    Any=0,
+    //% block="1"
+    One=162,
+    //% block="2"
+    Two=98,
+    //% block="3"
+    Three=226,
+    //% block="4"
+    Four=34,
+    //% block="5"
+    Five=2,
+    //% block="6"
+    Six=194,
+    //% block="save"
+    Save=224,
+    //% block="■"
+    Stop=168,
+    //% block="load"
+    Load=144,
+    //% block="X"
+    Cross=104,
+    //% block="║"
+    Pause=152,
+    //% block="/"
+    Tick=176,
+    //% block="↑"
+    Up=24,
+    //% block="↓"
+    Down=74,
+    //% block="←"
+    Left=16,
+    //% block="→"
+    Right=90,
+    //% block="►"
+    Go=56
+}
+
+/**
+  * IR Key code translations without the Any code
+  */
+enum RVirNoAny
+{
+    //% block="1"
+    One=162,
+    //% block="2"
+    Two=98,
+    //% block="3"
+    Three=226,
+    //% block="4"
+    Four=34,
+    //% block="5"
+    Five=2,
+    //% block="6"
+    Six=194,
+    //% block="save"
+    Save=224,
+    //% block="■"
+    Stop=168,
+    //% block="load"
+    Load=144,
+    //% block="X"
+    Cross=104,
+    //% block="║"
+    Pause=152,
+    //% block="/"
+    Tick=176,
+    //% block="↑"
+    Up=24,
+    //% block="↓"
+    Down=74,
+    //% block="←"
+    Left=16,
+    //% block="→"
+    Right=90,
+    //% block="►"
+    Go=56
+}
+
+/**
  * Blocks to operate 4tronix M.A.R.S. Rover
  */
 //% weight=10 color=#e7660b icon="\uf135"
@@ -185,6 +269,11 @@ namespace marsRover
     let servoOffsets: number[] = [];
     let fireBand: fireled.Band;
     let _updateMode = RVupdateMode.Auto;
+
+// MARS Rover IR constants
+    const irPin = DigitalPin.P16
+    const irEvent = 1995
+
 
 
 // HELPER FUNCTIONS
@@ -512,6 +601,7 @@ namespace marsRover
     //% block="read sonar as %unit"
     //% weight=100
     //% subcategory=Sensors
+    //% group="Ultrasonic sonar"
     export function readSonar(unit: RVpingUnit): number
     {
         // send pulse
@@ -620,6 +710,62 @@ namespace marsRover
 	for (let i=0; i<16; i++)
             wrEEROM(servoOffsets[i],i);
     }
+
+// Optional Infrared Receiver Blocks
+
+    /**
+      * Action on IR message received
+      */
+    //% weight=90
+    //% blockId=onIrEvent
+    //% block="on IR key%key"
+    //% subcategory=Sensors
+    //% group=InfraRed
+    export function onIREvent(event: RVirKeys, handler: Action)
+    {
+        irCore.initEvents(irPin)
+        control.onEvent(irEvent, <number>event, handler)
+    }
+
+    /**
+     * Check if IR key pressed
+     */
+    //% weight=80
+    //% blockId=IRKey
+    //% block="IR key%key|was pressed"
+    //% subcategory=Sensors
+    //% group=InfraRed
+    export function irKey(key: RVirKeys): boolean
+    {
+        return (irCore.LastCode() == key)
+    }
+
+    /**
+      * Last IR Code received as number
+      */
+    //% weight=70
+    //% blockId=lastIRCode
+    //% block="IR code"
+    //% subcategory=Sensors
+    //% group=InfraRed
+    export function lastIRCode(): number
+    {
+	return irCore.LastCode()
+    }
+
+    /**
+      * IR Key Codes as number
+      */
+    //% weight=60
+    //% blockId=IRKeyCode
+    //% block="IR Key%key"
+    //% subcategory=Sensors
+    //% group=InfraRed
+    export function irKeyCode(key: RVirNoAny): number
+    {
+	return key
+    }
+
 
 
 // FireLed Status Blocks
